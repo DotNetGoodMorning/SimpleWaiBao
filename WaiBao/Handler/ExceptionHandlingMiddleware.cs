@@ -41,7 +41,7 @@ public class ExceptionHandlingMiddleware
         }
         finally
         {
-            if (!isHandle && httpContext.Response.StatusCode != 200 )
+            if (!isHandle && httpContext.Response.StatusCode == 401 )
             {
                 await HandleNotSuccessSattusCodeAsync(httpContext, httpContext.Response.StatusCode);
             }
