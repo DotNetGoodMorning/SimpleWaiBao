@@ -12,7 +12,7 @@ using System.Net;
 var builder = WebApplication.CreateBuilder(args);
 
 #region 代理请求测试
-await ProxyRun();
+//await ProxyRun();
 #endregion
 
 
@@ -192,15 +192,15 @@ ServiceLocator.ApplicationBuilder = app;
 app.MapGet("/health", () => "1024");
 app.Run();
 
-static async Task ProxyRun()
-{
-    var proxy = new WebProxy("proxy.shenlongproxy.com", 31212);                                             
-    proxy.Credentials = new NetworkCredential(userName: "customer-42b05a76a27", password: "d413b4b9"); 
-    var httpClientHandler = new HttpClientHandler
-    {
-        Proxy = proxy,
-    };
-    HttpClient client = new HttpClient(httpClientHandler);
-    var ret = await client.GetStringAsync("https://www.google.com");
-    Console.WriteLine(ret);
-}
+//static async Task ProxyRun()
+//{
+//    var proxy = new WebProxy("proxy.shenlongproxy.com", 31212);                                             
+//    proxy.Credentials = new NetworkCredential(userName: "customer-42b05a76a27", password: "d413b4b9"); 
+//    var httpClientHandler = new HttpClientHandler
+//    {
+//        Proxy = proxy,
+//    };
+//    HttpClient client = new HttpClient(httpClientHandler);
+//    var ret = await client.GetStringAsync("https://www.google.com");
+//    Console.WriteLine(ret);
+//}

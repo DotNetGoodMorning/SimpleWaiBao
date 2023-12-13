@@ -71,9 +71,12 @@ namespace WaiBao.Api
             string foldername = "videos";
             string settingPath = "nfile";
             string folderpath = Path.Combine(settingPath, foldername);
-            if (!Directory.Exists(folderpath))
+            //本地文件夹路径
+            string localPath = Path.Combine(AppConfig.RootPath, folderpath);
+
+            if (!Directory.Exists(localPath))
             {
-                Directory.CreateDirectory(folderpath);
+                Directory.CreateDirectory(localPath);
             }
 
             List<FileSourceEntity> lst = new();
@@ -83,6 +86,9 @@ namespace WaiBao.Api
                 string strpath = Path.Combine(foldername, DateTime.Now.ToString("MMddHHmmss") + Path.GetFileName(file.FileName));
                 var path = Path.Combine(settingPath, strpath);
 
+                //本地文件路径
+                var localFilePath = Path.Combine(AppConfig.RootPath, path);
+
                 lst.Add(new FileSourceEntity
                 {
                     Name = file.FileName,
@@ -90,7 +96,7 @@ namespace WaiBao.Api
                     SourceType = 1,
                     Ur = "",
                 });
-                using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (var stream = new FileStream(localFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     await file.CopyToAsync(stream);
                 }
@@ -170,7 +176,7 @@ namespace WaiBao.Api
                 var infoMsg = $"{string.Join('、', excludeFiles.Select(c => c.FileName))} 图片格式错误";
                 return Success(infoMsg);
             }
-            return Success("上传成功");
+            return Success(lst);
         }
 
         public class UploadFileDto
