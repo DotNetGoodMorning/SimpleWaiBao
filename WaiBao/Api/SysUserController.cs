@@ -121,7 +121,7 @@ public class SysUserController : BaseApi
         if (replyVal >= 10)
         {
 
-            var hasAccount = await db.Queryable<SysUserEntity>().Where(a => !a.IsBan && a.UsePwd == pwd && a.UserName == model.UserName).FirstAsync();
+            var hasAccount = await db.Queryable<SysUserEntity>().Where(a => !a.IsBan.Value && a.UsePwd == pwd && a.UserName == model.UserName).FirstAsync();
             if (hasAccount != null)
             {
                 hasAccount.IsBan = true;
@@ -134,7 +134,7 @@ public class SysUserController : BaseApi
 
 
 
-        var loginResult = await db.Queryable<SysUserEntity>().Where(a => !a.IsBan && a.UsePwd == pwd && a.UserName == model.UserName).AnyAsync();
+        var loginResult = await db.Queryable<SysUserEntity>().Where(a => !a.IsBan.Value && a.UsePwd == pwd && a.UserName == model.UserName).AnyAsync();
 
         // 验证用户名和密码
         if (!loginResult)

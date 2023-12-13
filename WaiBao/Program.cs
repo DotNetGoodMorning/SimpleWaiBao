@@ -30,12 +30,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<MvcOptions>(o =>
 {
-
     o.Filters.Add<AuthFilter>();
     o.Filters.Add<ActionFilter>();
     o.Filters.Add<ResourceFilter>();
     o.Filters.Add<ResultFilter>();
 });
+
+
 
 
 
@@ -87,6 +88,7 @@ configuration.GetSection("AppSettings").Bind(appSettings);
 configuration.GetSection("EmailSetting").Bind(emailSetting);
 AppConfig.Settings = appSettings;
 AppConfig.EmailSetting = emailSetting;
+AppConfig.RootPath = builder.Environment.WebRootPath;
 #endregion
 
 //内存缓存

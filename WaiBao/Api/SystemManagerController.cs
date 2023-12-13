@@ -80,7 +80,7 @@ public class SystemManagerController : BaseApi
         #region 初始化用户表数据
         string name = AppConfig.Settings.DefaultAccount;
         string pwd = Encrypt(AppConfig.Settings.DefaultPwd);
-        var loginResult = await db.Queryable<SysUserEntity>().Where(a => !a.IsBan && a.UsePwd == pwd && a.UserName == name).AnyAsync();
+        var loginResult = await db.Queryable<SysUserEntity>().Where(a => !a.IsBan.Value && a.UsePwd == pwd && a.UserName == name).AnyAsync();
         if (!loginResult)
         {
             await db.Insertable<SysUserEntity>(new SysUserEntity { IsBan = false, UsePwd = pwd, UserName = name }).ExecuteCommandAsync();

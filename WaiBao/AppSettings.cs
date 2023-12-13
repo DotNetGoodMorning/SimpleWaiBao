@@ -48,5 +48,7 @@
     {
         public static AppSettings Settings { get; set; }
         public static EmailSetting EmailSetting { get; set; }
+
+        public static string RootPath { get; set; }
     }
 }

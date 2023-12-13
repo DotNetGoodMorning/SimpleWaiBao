@@ -24,10 +24,10 @@ public class SysUserEntity : BaseEntity
     /// 邮箱
     /// </summary>
     [SugarColumn(IsNullable = true)]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     /// <summary>
     /// 为true的时候禁止登录
     /// </summary>
-    public bool IsBan { get; set; } = false;
+    public bool? IsBan { get; set; } = false;
 }

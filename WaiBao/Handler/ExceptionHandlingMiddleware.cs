@@ -130,7 +130,7 @@ public class ExceptionHandlingMiddleware
                 break;
             default:
                 response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                errorResponse.Msg = "Internal Server errors. Check Logs!";
+                errorResponse.Msg = $"服务器发生异常:{exception.Message}";
                 break;
         }
         _logger.LogError(exception.Message);

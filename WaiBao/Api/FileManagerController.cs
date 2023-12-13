@@ -107,7 +107,7 @@ namespace WaiBao.Api
         }
 
         /// <summary>
-        /// 上传视频
+        /// 上传图片
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
@@ -117,7 +117,7 @@ namespace WaiBao.Api
 
             if (dto.Files == null || !dto.Files.Any()) return Error("请选择上传的图片。");
             //格式限制
-            var allowType = new string[] { "image/jpg", "image/png", "image/jpeg" };            
+            var allowType = new string[] { "image/jpg", "image/png", "image/jpeg" };
 
             var allowedFile = dto.Files.Where(c => allowType.Contains(c.ContentType));
             if (!allowedFile.Any()) return Error("图片格式错误");
@@ -126,9 +126,12 @@ namespace WaiBao.Api
             string foldername = "images";
             string settingPath = "nfile";
             string folderpath = Path.Combine(settingPath, foldername);
-            if (!Directory.Exists(folderpath))
+
+            //本地文件夹路径
+            string localPath = Path.Combine(AppConfig.RootPath, folderpath);
+            if (!Directory.Exists(localPath))
             {
-                Directory.CreateDirectory(folderpath);
+                Directory.CreateDirectory(localPath);
             }
 
             List<FileSourceEntity> lst = new();
@@ -138,14 +141,17 @@ namespace WaiBao.Api
                 string strpath = Path.Combine(foldername, DateTime.Now.ToString("MMddHHmmss") + Path.GetFileName(file.FileName));
                 var path = Path.Combine(settingPath, strpath);
 
+                //本地文件路径
+                var localFilePath = Path.Combine(AppConfig.RootPath, path);
+
                 lst.Add(new FileSourceEntity
                 {
                     Name = file.FileName,
                     Path = path,
                     SourceType = 0,
-                    Ur = "",
+                    Ur = AppConfig.Settings.WebUrl + "/" + path.Replace("\\", "/"),
                 });
-                using (var stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                using (var stream = new FileStream(localFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     await file.CopyToAsync(stream);
                 }

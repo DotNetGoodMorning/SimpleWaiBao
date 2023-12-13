@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>KinghtNing.JustApi</id>
-    <version>1.0.2</version>
+    <version>1.4.0</version>
     <description> 清爽开发快速包,以普通企业官网后台api为原型</description>
-    <authors>testG6</authors>
+    <authors>ning</authors>
     <packageTypes>
       <packageType name="WaiBao" />
     </packageTypes>
