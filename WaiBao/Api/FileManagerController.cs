@@ -28,6 +28,18 @@ namespace WaiBao.Api
         }
 
         /// <summary>
+        /// 视频列表
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ApiResult> GetPage([FromBody] ReqPage model)
+        {
+            var pageInfo = await GetPage<FileSourceEntity>(model, !string.IsNullOrWhiteSpace(model.Key), a => a.Name.Contains(model.Key), a => a.Id, OrderByType.Desc);
+            return Success(pageInfo);
+        }
+
+        /// <summary>
         /// 下载文件
         /// </summary>
         /// <param name="id">资源ID</param>

@@ -62,11 +62,11 @@ namespace WaiBao.Api
         /// <param name="model"></param>
         /// <returns></returns>        
         [HttpPost, Authorize]
-        public async Task<ApiResult> SaveArticle([FromBody] ReqArticle model)
+        public async Task<ApiResult> SaveArticle([FromBody] ArticleEntity model)
         {
-            var entity = model.Adapt<ArticleEntity>();
-            entity.CreateTime = DateTime.Now;
-            await SaveAsync(entity);
+            //var entity = model.Adapt<ArticleEntity>();
+            model.CreateTime = DateTime.Now;
+            await SaveAsync(model);
             return Success(model);
         }
 

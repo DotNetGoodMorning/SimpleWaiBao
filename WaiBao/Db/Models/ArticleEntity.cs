@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WaiBao.Db.Models;
 
-public class ReqArticle(string Title, string Content, Int16 Sort, Int16 Type);
+//public class ReqArticle(string Title, string Content, Int16 Sort, Int16 Type);
 
 /// <summary>
 /// 文章-包括关于我们
@@ -26,7 +26,7 @@ public class ArticleEntity : BaseEntity
     /// 创建时间
     /// </summary>
 
-    public DateTime CreateTime { get; set; }
+    public DateTime? CreateTime { get; set; }
 
     /// <summary>
     /// 下一个
