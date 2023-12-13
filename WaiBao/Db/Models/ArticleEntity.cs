@@ -10,11 +10,21 @@ public class ReqArticle(string Title, string Content, Int16 Sort, Int16 Type);
 /// </summary>
 public class ArticleEntity : BaseEntity
 {
+    /// <summary>
+    /// 标题
+    /// </summary>
     [SugarColumn(IsNullable = false), Required(ErrorMessage = "缺少标题信息")]
     public string? Title { get; set; }
 
+    /// <summary>
+    /// 内容
+    /// </summary>
     [SugarColumn(ColumnDataType = "text")]
     public string Content { get; set; }
+
+    /// <summary>
+    /// 创建时间
+    /// </summary>
 
     public DateTime CreateTime { get; set; }
 

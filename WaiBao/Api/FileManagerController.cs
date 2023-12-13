@@ -20,6 +20,9 @@ namespace WaiBao.Api
     [ApiController]
     public class FileManagerController : BaseApi
     {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         public FileManagerController()
         {
         }

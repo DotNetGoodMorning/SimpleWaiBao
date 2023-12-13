@@ -21,6 +21,10 @@ namespace WaiBao.Api;
 [ApiController]
 public class ProductController : BaseApi
 {
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="memoryCache"></param>
     public ProductController()
     {
 
@@ -126,5 +130,8 @@ public class ProductController : BaseApi
 /// </summary>
 public class ReqProductPage : ReqPage
 {
+    /// <summary>
+    /// 分类ID
+    /// </summary>
     public int ClassId { get; set; } = -1;
 }

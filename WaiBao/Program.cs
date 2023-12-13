@@ -12,19 +12,7 @@ using System.Net;
 var builder = WebApplication.CreateBuilder(args);
 
 #region 代理请求测试
-//string proxyServer = "http://156.236.118.17:58192";
-//var proxy = new WebProxy(proxyServer);
-//HttpClientHandler httpClientHandler = new HttpClientHandler()
-//{
-//    Proxy = proxy
-//};
-//var httpCient = new HttpClient(httpClientHandler);
-//// 增加头部
-////httpCient.DefaultRequestHeaders.Add("appKey", "f1234ed29853f704");
-////httpCient.DefaultRequestHeaders.Add("Header-Key", "f1234ed29853f704");
-
-//string targetUrl = "http://httpbin.org/get";
-//var httpResult = httpCient.GetStringAsync(targetUrl).Result;
+await ProxyRun();
 #endregion
 
 
@@ -203,3 +191,16 @@ ServiceLocator.Instance = app.Services;
 ServiceLocator.ApplicationBuilder = app;
 app.MapGet("/health", () => "1024");
 app.Run();
+
+static async Task ProxyRun()
+{
+    var proxy = new WebProxy("proxy.shenlongproxy.com", 31212);                                             
+    proxy.Credentials = new NetworkCredential(userName: "customer-42b05a76a27", password: "d413b4b9"); 
+    var httpClientHandler = new HttpClientHandler
+    {
+        Proxy = proxy,
+    };
+    HttpClient client = new HttpClient(httpClientHandler);
+    var ret = await client.GetStringAsync("https://www.google.com");
+    Console.WriteLine(ret);
+}

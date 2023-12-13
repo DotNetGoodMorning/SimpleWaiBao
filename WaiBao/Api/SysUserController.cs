@@ -45,6 +45,11 @@ namespace WaiBao.Api;
 public class SysUserController : BaseApi
 {
     protected IMemoryCache _memoryCache;
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="memoryCache"></param>
     public SysUserController(IMemoryCache memoryCache)
     {
         _memoryCache = memoryCache;
