@@ -21,6 +21,32 @@ namespace WaiBao.Api
 
 
         #region Orm封装
+        /// <summary>
+        /// 新增单条数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [NonAction]
+        public async Task<bool> AddAsync<T>(T model) where T : BaseEntity, new()
+        {
+            var result = await db.Insertable<T>(model).ExecuteCommandAsync();
+            return result > 0;
+        }
+
+        /// <summary>
+        /// 修改数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [NonAction]
+        public async Task<bool> UpdateAync<T>(T model) where T : BaseEntity, new()
+        {
+            var result = await db.Updateable<T>(model).ExecuteCommandAsync();
+            return result > 0;
+        }
+
 
         #region 保存
 
@@ -142,6 +168,20 @@ namespace WaiBao.Api
 
         #endregion
 
+        /// <summary>
+        /// 根据操作结果提示成功还是失败
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        [NonAction]
+        public ApiResult Result(bool result)
+        {
+            if (result)
+            {
+                return SuccessMsg("操作成功");
+            }
+            return Error("操作失败");
+        }
 
         [NonAction]
         public ApiResult Success(object data, string msg = "成功")

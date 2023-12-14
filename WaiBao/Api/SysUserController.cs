@@ -76,16 +76,33 @@ public class SysUserController : BaseApi
     }
 
     /// <summary>
-    /// 添加系统用户
+    /// 保存用户
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
     [HttpPost, Authorize]
-    public async Task<ApiResult> AddSysUser([FromBody] SysUserEntity model)
+    public async Task<ApiResult> SaveSysUser([FromBody] SysUserEntity model)
     {
         model.UsePwd = Encrypt(model.UsePwd);
-        await db.Insertable<SysUserEntity>(model).ExecuteCommandAsync();
-        return Success("添加成功");
+
+        var hasDuplicate = await db.Queryable<SysUserEntity>()
+         .Where(a => a.UserName == model.UserName && (model.Id <= 0 || a.Id != model.Id))
+         .AnyAsync();
+
+        if (hasDuplicate)
+        {
+            return Error("已经存在相同名称的用户了");
+        }
+
+        //如果是新增
+        if (model.Id <= 0)
+        {
+            return Result(await AddAsync(model));
+        }
+        else
+        {
+            return Result(await UpdateAync(model));
+        }
     }
 
     /// <summary>
