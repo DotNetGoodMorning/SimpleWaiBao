@@ -17,19 +17,6 @@ echo look: %latest%
 REM 等待用户确认后再推送
 pause
 
-REM 从 apiKey.txt 文件中读取 API 密钥
-set "apiKey="
-for /f "usebackq delims=" %%a in ("apiKey.txt") do (
-    set "apiKey=%%a"
-    goto :push
-)
-
-:push
-REM 检查是否成功读取到 API 密钥
-if not defined apiKey (
-    echo Failed to read API key from apiKey.txt.
-    exit /b
-)
 
 REM 推送最新的 .nupkg 文件 http://localhost:6001/v3/index.json https://api.nuget.org/v3/index.json
 REM nuget push "%latest%" -Source "https://api.nuget.org/v3/index.json" -ApiKey "%apiKey%"

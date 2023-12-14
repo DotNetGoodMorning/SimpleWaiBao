@@ -95,7 +95,7 @@ public class ProductClassEntity : BaseEntity
     /// <summary>
     /// 分类标题
     /// </summary>
-    public int Title { get; set; }
+    public string Title { get; set; }
 
     /// <summary>
     /// 子级
