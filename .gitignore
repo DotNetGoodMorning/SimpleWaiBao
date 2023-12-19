@@ -400,3 +400,4 @@ FodyWeavers.xsd
 *.sln.iml
 /WaiBao/appsettings.Development.json
 /WaiBao/appsettings.Production.json
+/WaiBao/appsettings.json
