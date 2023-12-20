@@ -183,18 +183,34 @@ namespace WaiBao.Api
             return Error("操作失败");
         }
 
+        /// <summary>
+        /// 成功
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         [NonAction]
         public ApiResult Success(object data, string msg = "成功")
         {
             return new ApiResult() { Code = 0, Data = data, Msg = msg };
         }
 
+        /// <summary>
+        /// 成功消息
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         [NonAction]
         public ApiResult SuccessMsg(string msg = "执行成功")
         {
             return new ApiResult() { Code = 0, Data = new { }, Msg = msg };
         }
 
+        /// <summary>
+        /// 错误
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         [NonAction]
         public ApiResult Error(string msg)
         {
@@ -202,7 +218,11 @@ namespace WaiBao.Api
         }
 
 
-
+        /// <summary>
+        /// 加密方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [NonAction]
         public string Encrypt(string input)
         {
@@ -230,6 +250,10 @@ namespace WaiBao.Api
         }
 
 
+        /// <summary>
+        /// 检测系统是否初始化
+        /// </summary>
+        /// <returns></returns>
         [NonAction]
         public bool CheckIsInitSystem()
         {
@@ -286,6 +310,11 @@ namespace WaiBao.Api
         [NonAction]
         public void NoticeAdminEmail(string msg) => SendEmail(msg);
 
+        /// <summary>
+        /// 发送邮件
+        /// </summary>
+        /// <param name="body"></param>
+        /// <param name="subject"></param>
         [NonAction]
         public void SendEmail(string body, string subject = "网站安全通知")
         {
@@ -297,6 +326,9 @@ namespace WaiBao.Api
     }
 
 
+    /// <summary>
+    /// 分页模型
+    /// </summary>
     public class DataPageBase
     {
         public int PageSize { get; set; }
