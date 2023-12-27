@@ -17,14 +17,14 @@ public class ProductEntity : BaseEntity
     /// <summary>
     /// 封面图
     /// </summary>
-    [SugarColumn(IsNullable = true, ColumnDataType = "varchar(500)")]
+    [SugarColumn(IsNullable = true, ColumnDataType = "varchar(500)"),Required(ErrorMessage ="封面图必填")]
     public string CoverImage { get; set; } = string.Empty;
 
     /// <summary>
     /// 分类信息
     /// </summary>
     [Navigate(NavigateType.OneToOne, nameof(ClassId))]
-    public ProductClassEntity ClassInfo { get; set; } = new ProductClassEntity();
+    public ProductClassEntity? ClassInfo { get; set; } = new ProductClassEntity();
 
     /// <summary>
     /// 产品详情内容
@@ -95,11 +95,11 @@ public class ProductClassEntity : BaseEntity
     /// <summary>
     /// 分类标题
     /// </summary>
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     /// <summary>
     /// 子级
     /// </summary>
     [SqlSugar.SugarColumn(IsIgnore = true)]
-    public List<ProductClassEntity> Child { get; set; } = new List<ProductClassEntity>();
+    public List<ProductClassEntity>? Child { get; set; } = new List<ProductClassEntity>();
 }

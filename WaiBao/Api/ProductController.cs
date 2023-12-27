@@ -21,10 +21,9 @@ namespace WaiBao.Api;
 [ApiController]
 public class ProductController : BaseApi
 {
-    /// <summary>
-    /// 构造函数
-    /// </summary>
-    /// <param name="memoryCache"></param>
+   /// <summary>
+   /// 构造函数
+   /// </summary>
     public ProductController()
     {
 
@@ -119,6 +118,17 @@ public class ProductController : BaseApi
     public async Task<ApiResult> DelProduct([Required(ErrorMessage = "缺少入参")] int id)
     {
         await DeleteAsync<ProductEntity>(id);
+        return SuccessMsg("删除成功");
+    }
+    /// <summary>
+    /// 删除产品
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<ApiResult> DelProductMore([Required(ErrorMessage = "缺少入参")] int[] ids)
+    {
+        await DeleteAsync<ProductEntity>(ids);
         return SuccessMsg("删除成功");
     }
 

@@ -106,7 +106,7 @@ namespace WaiBao.Api
                     Name = file.FileName,
                     Path = path,
                     SourceType = 1,
-                    Ur = "",
+                    Ur = AppConfig.Settings.WebUrl + "/" + path.Replace("\\", "/"),
                 });
                 using (var stream = new FileStream(localFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {

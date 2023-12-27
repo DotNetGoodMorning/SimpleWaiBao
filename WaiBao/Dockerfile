@@ -1,9 +1,20 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+
 USER root
+
 WORKDIR /app
+
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+RUN apt-get update && apt-get install -y fontconfig
+RUN fc-cache -f -v
+
 EXPOSE 8080
+
+ENV TZ=Asia/Shanghai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release

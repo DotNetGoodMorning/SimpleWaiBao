@@ -11,7 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appsettings.Development.json" />
     <Content Remove="appsettings.json" />
+    <Content Remove="appsettings.Production.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +22,12 @@
 
   <ItemGroup>
     <None Include=".template.config\Blog.Core.Webapi.Template.2.5.2.nupkg" />
+    <None Include="appsettings.Production.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -30,6 +38,7 @@
     <PackageReference Include="Flurl.Http" Version="3.2.4" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Masuit.Tools.Core" Version="2.6.8.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.25" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageReference Include="SqlSugarCore" Version="5.1.4.126" />
@@ -37,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using WaiBao;
 using System.Text.Json.Serialization;
 using System.Net;
+using WaiBao.Db.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,8 @@ builder.Services.AddControllers()
 .AddJsonOptions(options =>
 {
 
+    //long 转 string
+    options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
     //避免在序列化对象时陷入无限循环，如果这样了这个配置就直接不鸟它
     options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     //默认就是转换为小驼峰式命名规则，设为null 就是保留原来格式
@@ -55,6 +58,7 @@ builder.Services.AddControllers()
     options.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Disallow;
     //设置JSON序列化器的最大嵌套深度为 0 （防止恶意攻击，往你json里面塞进去几个G的字符串）
     options.JsonSerializerOptions.MaxDepth = 0;
+    //options.JsonSerializerOptions.IgnoreNullValues = true;
 });
 
 #region 基本设置

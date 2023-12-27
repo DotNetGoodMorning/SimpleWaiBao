@@ -72,10 +72,12 @@ public class SystemManagerController : BaseApi
         if (db.DbMaintenance.IsAnyTable(nameof(ArticleEntity), false)) db.DbMaintenance.DropTable(nameof(ArticleEntity));
         if (db.DbMaintenance.IsAnyTable(nameof(ProductClassEntity), false)) db.DbMaintenance.DropTable(nameof(ProductClassEntity));
         if (db.DbMaintenance.IsAnyTable(nameof(ProductEntity), false)) db.DbMaintenance.DropTable(nameof(ProductEntity));
-        if (db.DbMaintenance.IsAnyTable(nameof(SlideShowEntity), false)) db.DbMaintenance.DropTable(nameof(SlideShowEntity));
+        if (db.DbMaintenance.IsAnyTable(nameof(SlideShowEntity), false)) db.DbMaintenance.DropTable(nameof(SlideShowEntity));    
+        if (db.DbMaintenance.IsAnyTable(nameof(FeedBackEntity), false)) db.DbMaintenance.DropTable(nameof(FeedBackEntity));
 
         //初始化用户表
         db.CodeFirst.InitTables<SysUserEntity>();
+        db.CodeFirst.InitTables<FeedBackEntity>();
 
         #region 初始化用户表数据
         string name = AppConfig.Settings.DefaultAccount;

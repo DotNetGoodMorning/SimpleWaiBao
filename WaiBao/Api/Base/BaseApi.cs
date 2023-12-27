@@ -92,6 +92,14 @@ namespace WaiBao.Api
         /// <returns></returns>
         public async Task<bool> DeleteAsync<T>(int id) where T : BaseEntity, new() => await db.Deleteable<T>().Where(a => a.Id == id).ExecuteCommandAsync() > 0;
 
+        /// <summary>
+        /// 删除多个
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteAsync<T>(int[] ids) where T : BaseEntity, new() => await db.Deleteable<T>().Where(a => ids.Contains(a.Id)).ExecuteCommandAsync() > 0;
+
         #endregion
 
         #region 普通查询
