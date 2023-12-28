@@ -53,6 +53,7 @@ public class ProductController : BaseApi
     {
         Dictionary<bool, Expression<Func<ProductEntity, bool>>> whereIFs = new Dictionary<bool, Expression<Func<ProductEntity, bool>>>();
         whereIFs.TryAdd(model.ClassId != -1, a => a.ClassId == model.ClassId);
+        whereIFs.TryAdd(model.IsHot != -1, a => a.IsHot == model.IsHot);
         whereIFs.TryAdd(string.IsNullOrEmpty(model.Key), a => a.ProductName.Contains(model.Key) || a.ArticleNumber.Contains(model.Key));
         var pageInfo = await GetPage<ProductEntity>(model.Adapt<ReqPage>(), whereIFs);
         return Success(pageInfo);
@@ -144,4 +145,11 @@ public class ReqProductPage : ReqPage
     /// 分类ID
     /// </summary>
     public int ClassId { get; set; } = -1;
+
+    /// <summary>
+    /// 是否是热销系列
+    /// 0: 非热销
+    /// 1:热销
+    /// </summary>
+    public int? IsHot { get; set; } = -1;
 }

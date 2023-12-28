@@ -33,6 +33,14 @@ public class ProductEntity : BaseEntity
     public string? Detail { get; set; }
 
     /// <summary>
+    /// 是否是热销系列
+    /// 0: 非热销
+    /// 1:热销
+    /// </summary>
+    public int? IsHot { get; set; } = 0;
+
+
+    /// <summary>
     /// 产品货号
     /// </summary>
     public string? ArticleNumber { get; set; }
@@ -57,6 +65,11 @@ public class ProductEntity : BaseEntity
     /// 外箱规格
     /// </summary>
     public string? BoxSpecification { get; set; }
+
+    /// <summary>
+    /// 彩盒规格
+    /// </summary>
+    public string? ColorBoxSpecification { get; set; }
 
     /// <summary>
     /// 产品规格
