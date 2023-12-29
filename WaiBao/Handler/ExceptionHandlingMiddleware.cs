@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -156,11 +158,39 @@ public class ResultFilter : IAsyncResultFilter
                 //errDetails.Errors.Values.Any()
             }
             //badresObj.Value = new ApiResult() { Code = 500, Msg = "服务器异常" };
-            var options = new JsonSerializerOptions
+
+            string errorMessages = string.Empty;
+
+            if (!context.ModelState.IsValid)
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                errorMessages = "入参校验失败:";
+            }
+
+
+            //Model模型验证
+            foreach (var modelStateEntry in context.ModelState.Values)
+            {
+                foreach (var error in modelStateEntry.Errors)
+                {
+                    errorMessages += error.ErrorMessage;
+                }
+            }
+
+            var options1 = new JsonSerializerOptions
+            {
+                ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new JsonStringEnumConverter() },
+                PropertyNameCaseInsensitive = false,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                AllowTrailingCommas = false,
+                ReadCommentHandling = JsonCommentHandling.Disallow,
+                MaxDepth = 0,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
             };
-            var result = JsonSerializer.Serialize(new ApiResult() { Code = 500, Msg = "服务器异常" }, options);
+            var result = JsonSerializer.Serialize(new ApiResult() { Code = 500, Msg = errorMessages ?? "服务器异常" }, options1);
 
             context.Result = new OkObjectResult(result);
 

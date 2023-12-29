@@ -17,10 +17,16 @@ public class ArticleEntity : BaseEntity
     public string? Title { get; set; }
 
     /// <summary>
+    /// 封面图
+    /// </summary>
+    [SugarColumn(IsNullable = true, ColumnDataType = "varchar(500)"), Required(ErrorMessage = "封面图必填")]
+    public string CoverImage { get; set; } = string.Empty;
+
+    /// <summary>
     /// 内容
     /// </summary>
     [SugarColumn(ColumnDataType = "text")]
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间

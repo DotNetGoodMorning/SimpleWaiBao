@@ -75,6 +75,15 @@ public class SystemManagerController : BaseApi
         if (db.DbMaintenance.IsAnyTable(nameof(SlideShowEntity), false)) db.DbMaintenance.DropTable(nameof(SlideShowEntity));    
         if (db.DbMaintenance.IsAnyTable(nameof(FeedBackEntity), false)) db.DbMaintenance.DropTable(nameof(FeedBackEntity));
 
+        if (db.DbMaintenance.IsAnyTable(nameof(FileSourceClassEntity), false)) db.DbMaintenance.DropTable(nameof(FileSourceClassEntity));
+
+        #region 初始化文件分类
+        db.CodeFirst.InitTables<FileSourceClassEntity>();
+        db.Insertable(new FileSourceClassEntity { Code = "001", Name = "图片" }).ExecuteCommand();
+        db.Insertable(new FileSourceClassEntity { Code = "002", Name = "视频" }).ExecuteCommand();
+        #endregion
+
+
         //初始化用户表
         db.CodeFirst.InitTables<SysUserEntity>();
         db.CodeFirst.InitTables<FeedBackEntity>();

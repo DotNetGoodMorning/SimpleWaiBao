@@ -194,6 +194,21 @@ app.UseSwaggerUI(c =>
 ServiceLocator.Instance = app.Services;
 ServiceLocator.ApplicationBuilder = app;
 app.MapGet("/health", () => "1024");
+SqlSugarHelper.Db.DbMaintenance.CreateDatabase();
+
+
+//if (SqlSugarHelper.Db.DbMaintenance.IsAnyTable(nameof(FileSourceClassEntity), false)) SqlSugarHelper.Db.DbMaintenance.DropTable(nameof(FileSourceClassEntity));
+
+//#region 初始化文件分类
+//SqlSugarHelper.Db.CodeFirst.InitTables<FileSourceClassEntity>();
+//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "001", Name = "图片" }).ExecuteCommand();
+//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "002", Name = "视频" }).ExecuteCommand();
+//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "003", Name = "产品认证" }).ExecuteCommand();
+//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "004", Name = "产品说明书" }).ExecuteCommand();
+//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "005", Name = "软件" }).ExecuteCommand();
+//#endregion
+
+
 app.Run();
 
 //static async Task ProxyRun()

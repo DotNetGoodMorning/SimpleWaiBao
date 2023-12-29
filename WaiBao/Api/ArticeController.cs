@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using SqlSugar;
 using Mapster;
 using WaiBao.Db.Models;
+using System.Linq.Expressions;
 
 namespace WaiBao.Api
 {
@@ -25,9 +26,26 @@ namespace WaiBao.Api
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ApiResult> GetPage([FromBody] ReqPage model)
+        public async Task<ApiResult> GetPage([FromBody] ArticleReq model)
         {
-            var pageInfo = await GetPage<ArticleEntity>(model, !string.IsNullOrWhiteSpace(model.Key), a => a.Title.Contains(model.Key), a => a.Sort, OrderByType.Desc);
+
+            List<WhereIFs<ArticleEntity>> whereIFs = new List<WhereIFs<ArticleEntity>>();
+
+            whereIFs.Add(
+                new WhereIFs<ArticleEntity>
+                {
+                    where = string.IsNullOrEmpty(model.Key),
+                    expression = a => a.Title.Contains(model.Key)
+                });
+
+            whereIFs.Add(
+               new WhereIFs<ArticleEntity>
+               {
+                   where = model.Type!=-1,
+                   expression = a => a.Type == model.Type
+               });
+
+            var pageInfo = await GetPage<ArticleEntity>(model, whereIFs, a => a.Sort, OrderByType.Desc);
             return Success(pageInfo);
         }
 

@@ -21,9 +21,9 @@ namespace WaiBao.Api;
 [ApiController]
 public class ProductController : BaseApi
 {
-   /// <summary>
-   /// 构造函数
-   /// </summary>
+    /// <summary>
+    /// 构造函数
+    /// </summary>
     public ProductController()
     {
 
@@ -51,11 +51,27 @@ public class ProductController : BaseApi
     [HttpPost]
     public async Task<ApiResult> GetLstProduct([Required(ErrorMessage = "缺少入参")][FromBody] ReqProductPage model)
     {
-        Dictionary<bool, Expression<Func<ProductEntity, bool>>> whereIFs = new Dictionary<bool, Expression<Func<ProductEntity, bool>>>();
-        whereIFs.TryAdd(model.ClassId != -1, a => a.ClassId == model.ClassId);
-        whereIFs.TryAdd(model.IsHot != -1, a => a.IsHot == model.IsHot);
-        whereIFs.TryAdd(string.IsNullOrEmpty(model.Key), a => a.ProductName.Contains(model.Key) || a.ArticleNumber.Contains(model.Key));
-        var pageInfo = await GetPage<ProductEntity>(model.Adapt<ReqPage>(), whereIFs);
+        List<WhereIFs<ProductEntity>> whereIFs = new List<WhereIFs<ProductEntity>>();
+        whereIFs.Add(
+            new WhereIFs<ProductEntity>
+            {
+                where = model.ClassId != -1,
+                expression = a => a.ClassId == model.ClassId
+            });
+        whereIFs.Add(
+            new WhereIFs<ProductEntity>
+            {
+                where = model.IsHot != -1,
+                expression = a => a.IsHot == model.IsHot
+            });
+
+        whereIFs.Add(
+           new WhereIFs<ProductEntity>
+           {
+               where = string.IsNullOrEmpty(model.Key),
+               expression = a => a.ProductName.Contains(model.Key) || a.ArticleNumber.Contains(model.Key)
+           });
+        var pageInfo = await GetPage<ProductEntity>(model.Adapt<ReqPage>(), whereIFs,a=>a.Id,  OrderByType.Desc,true);
         return Success(pageInfo);
     }
     #endregion
@@ -71,13 +87,13 @@ public class ProductController : BaseApi
     [HttpPost, Authorize]
     public async Task<ApiResult> SaveProductClass([Required(ErrorMessage = "缺少入参")][FromBody] ProductClassEntity model)
     {
-        var hasDuplicate = await db.Queryable<ProductClassEntity>()
-         .Where(a => a.Title == model.Title && (model.Id <= 0 || a.Id != model.Id))
-         .AnyAsync();
-        if (hasDuplicate)
-        {
-            return Error("已经存在相同名称的产品分类了");
-        }
+        //var hasDuplicate = await db.Queryable<ProductClassEntity>()
+        // .Where(a => a.Title == model.Title && (model.Id <= 0 || a.Id != model.Id))
+        // .AnyAsync();
+        //if (hasDuplicate)
+        //{
+        //    return Error("已经存在相同名称的产品分类了");
+        //}
         await SaveAsync(model);
         return Success(model);
     }

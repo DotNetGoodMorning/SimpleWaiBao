@@ -19,8 +19,64 @@ namespace WaiBao.Api
         /// </summary>
         public SqlSugarScope db = SqlSugarHelper.Db;
 
+        /// <summary>
+        /// 资源查询入参
+        /// </summary>
+        public class FileReqPage : ReqPage
+        {
+            /// <summary>
+            ///  0 图片  1 视频
+            /// </summary>
+            public Int16 SourceType { get; set; } = -1;
+        }
+
+
 
         #region Orm封装
+
+        /// <summary>
+        /// 获取分页数据，支持多条件查询
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <param name="whereIFs"></param>
+        /// <param name="orderByexpression"></param>
+        /// <param name="type"></param>
+        /// <param name="isIncludes">是否导航查询</param>
+        /// <returns></returns>
+        [NonAction]
+        public async Task<ResPage<T>> GetPage<T>(ReqPage model, List<WhereIFs<T>> whereIFs, Expression<Func<T, object>>? orderByexpression = null, OrderByType type = OrderByType.Asc, bool isIncludes = false)
+        {
+            //单表分页
+            RefAsync<int> total = 0;
+            var lstQuery = db.Queryable<T>();
+
+            //导航属性查询
+            if (isIncludes)
+            {
+                lstQuery = lstQuery.IncludesAllFirstLayer();
+            }
+
+            foreach (var whereIF in whereIFs)
+            {
+                lstQuery = lstQuery.WhereIF(whereIF.where, whereIF.expression);
+            }
+
+            var lst = await lstQuery
+                   .OrderByIF(orderByexpression != null, orderByexpression, type)
+                 .ToPageListAsync(model.PageNumber, model.PageSize, total);
+
+            return new ResPage<T>
+            {
+                Data = lst,
+                PageSize = model.PageSize,
+                PageNumber = model.PageNumber,
+                Total = total
+            };
+
+        }
+
+
         /// <summary>
         /// 新增单条数据
         /// </summary>
@@ -148,7 +204,7 @@ namespace WaiBao.Api
         }
 
         [NonAction]
-        public async Task<object> GetPage<T>(ReqPage model, Dictionary<bool, Expression<Func<T, bool>>> whereIFs)
+        public async Task<object> GetPage<T>(ReqPage model, Dictionary<bool, Expression<Func<T, bool>>> whereIFs, Expression<Func<T, object>>? orderByexpression = null, OrderByType type = OrderByType.Asc)
         {
             //单表分页
             RefAsync<int> total = 0;//REF和OUT不支持异步,想要真的异步这是最优解
@@ -160,6 +216,7 @@ namespace WaiBao.Api
             }
 
             var lst = await lstQuery
+                 .OrderByIF(orderByexpression != null, orderByexpression, type)
                  .ToPageListAsync(model.PageNumber, model.PageSize, total);
 
             return new ResPage
@@ -222,7 +279,7 @@ namespace WaiBao.Api
         [NonAction]
         public ApiResult Error(string msg)
         {
-            return new ApiResult() { Code = 0, Data = new { }, Msg = msg };
+            return new ApiResult() { Code = -1, Data = new { }, Msg = msg };
         }
 
 
@@ -350,9 +407,33 @@ namespace WaiBao.Api
         public string Key { get; set; }
     }
 
+    /// <summary>
+    /// 文章搜索入参
+    /// </summary>
+    public class ArticleReq: ReqPage
+    {
+        /// <summary>
+        /// 文章类型 0：普通文章 211:关于我们  212：网站底部信息 213：备案号  214:产品认证 215:产品说明书 216:软件
+        /// </summary>
+        [SugarColumn(IsNullable = false)]
+        public Int16 Type { get; set; } = -1;
+    }
+
     public class ResPage : DataPageBase
     {
         public object Data { get; set; }
+    }
+
+    /// <summary>
+    /// 泛型分页返回模型
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ResPage<T> : DataPageBase
+    {
+        /// <summary>
+        /// 分页返回数据
+        /// </summary>
+        public List<T> Data { get; set; } = new List<T>();
     }
 
     public class ApiResult

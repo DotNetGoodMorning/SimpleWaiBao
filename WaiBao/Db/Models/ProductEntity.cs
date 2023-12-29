@@ -24,13 +24,24 @@ public class ProductEntity : BaseEntity
     /// 分类信息
     /// </summary>
     [Navigate(NavigateType.OneToOne, nameof(ClassId))]
-    public ProductClassEntity? ClassInfo { get; set; } = new ProductClassEntity();
+    public ProductClassEntity? ClassInfo { get; set; }
 
     /// <summary>
     /// 产品详情内容
     /// </summary>
     [SugarColumn(ColumnDataType = "text")]
     public string? Detail { get; set; }
+
+    /// <summary>
+    /// 关联视频ID
+    /// </summary>
+    public int VideoId { get; set; }
+
+    /// <summary>
+    /// 分类信息
+    /// </summary>
+    [Navigate(NavigateType.OneToOne, nameof(VideoId))]
+    public FileSourceEntity? VideoInfo { get; set; } 
 
     /// <summary>
     /// 是否是热销系列

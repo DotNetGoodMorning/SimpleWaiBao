@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,4 +52,11 @@ public class SqlSugarHelper
             }
         };
     }
+}
+
+
+public class WhereIFs<T>
+{
+    public Expression<Func<T, bool>> expression { get; set; }
+    public bool where { get; set; }
 }
