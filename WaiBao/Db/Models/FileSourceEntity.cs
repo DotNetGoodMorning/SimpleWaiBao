@@ -36,7 +36,13 @@ public class FileSourceEntity : BaseEntity
     /// <summary>
     /// 分类Code
     /// </summary>
-    public string ClassCode { get; set; }
+    public string ClassCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品信息
+    /// </summary>
+    [Navigate( NavigateType.OneToOne, nameof(Id),nameof(ProductEntity.VideoId))]
+    public ProductEntity? ProductInfo { get; set; }
 }
 
 

@@ -68,12 +68,40 @@ public class ProductController : BaseApi
         whereIFs.Add(
            new WhereIFs<ProductEntity>
            {
-               where = string.IsNullOrEmpty(model.Key),
-               expression = a => a.ProductName.Contains(model.Key) || a.ArticleNumber.Contains(model.Key)
+               where = !string.IsNullOrEmpty(model.Key),
+               expression = a => /*a.ProductName.Contains(model.Key) ||*/ a.ArticleNumber.Contains(model.Key)
            });
-        var pageInfo = await GetPage<ProductEntity>(model.Adapt<ReqPage>(), whereIFs,a=>a.Id,  OrderByType.Desc,true);
+        var pageInfo = await GetPage<ProductEntity>(model.Adapt<ReqPage>(), whereIFs, a => a.Id, OrderByType.Desc, true);
+
+        //var lstVideos = await GetListAsync<FileSourceEntity>(a => a.SourceType == 2);
+
+        //foreach (var item in pageInfo.Data)
+        //{
+        //   bool hasVideo  = lstVideos.Any(a=>a.Id ==item.VideoId);
+        //    item.
+        //}
+
+
         return Success(pageInfo);
     }
+
+    /// <summary>
+    /// 获取产品详情
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<ApiResult> GetProductDtl(int id)
+    {
+        var info = await db.Queryable<ProductEntity>()
+            .Where(a => a.Id == id)
+            .IncludesAllFirstLayer()
+            .FirstAsync();
+            
+            //await GetAsync<ProductEntity>(a => a.Id == id);
+        return Success(info);
+    }
+
     #endregion
 
 
@@ -114,13 +142,13 @@ public class ProductController : BaseApi
     [HttpPost, Authorize]
     public async Task<ApiResult> SaveProduct([Required(ErrorMessage = "缺少入参")][FromBody] ProductEntity model)
     {
-        var hasDuplicate = await db.Queryable<ProductEntity>()
-         .Where(a => a.ProductName == model.ProductName && (model.Id <= 0 || a.Id != model.Id))
-         .AnyAsync();
-        if (hasDuplicate)
-        {
-            return Error("已经存在相同名称的产品分类了");
-        }
+        //var hasDuplicate = await db.Queryable<ProductEntity>()
+        // .Where(a => a.ProductName == model.ProductName && (model.Id <= 0 || a.Id != model.Id))
+        // .AnyAsync();
+        //if (hasDuplicate)
+        //{
+        //    return Error("已经存在相同名称的产品分类了");
+        //}
 
         await SaveAsync(model);
         return Success(model);

@@ -86,7 +86,9 @@ namespace WaiBao.Api
         [NonAction]
         public async Task<bool> AddAsync<T>(T model) where T : BaseEntity, new()
         {
+
             var result = await db.Insertable<T>(model).ExecuteCommandAsync();
+
             return result > 0;
         }
 

@@ -51,6 +51,7 @@ public class FeedBackController : BaseApi
     public async Task<ApiResult> Save([FromBody] ReqSaveFeedBack model)
     {
         var entity = model.Adapt<FeedBackEntity>();
+        entity.CreateTime = DateTime.Now;
         await SaveAsync(entity);
         return Success(entity);
     }

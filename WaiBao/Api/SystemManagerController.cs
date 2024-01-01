@@ -75,6 +75,25 @@ public class SystemManagerController : BaseApi
         if (db.DbMaintenance.IsAnyTable(nameof(SlideShowEntity), false)) db.DbMaintenance.DropTable(nameof(SlideShowEntity));    
         if (db.DbMaintenance.IsAnyTable(nameof(FeedBackEntity), false)) db.DbMaintenance.DropTable(nameof(FeedBackEntity));
 
+
+
+        if (SqlSugarHelper.Db.DbMaintenance.IsAnyTable(nameof(SiteInfoEntity), false)) SqlSugarHelper.Db.DbMaintenance.DropTable(nameof(SiteInfoEntity));
+
+        #region 初始化网站基本信息
+        SqlSugarHelper.Db.CodeFirst.InitTables<SiteInfoEntity>();
+        SqlSugarHelper.Db.Insertable(new SiteInfoEntity
+        {
+            Address = "地址信息",
+            CompanyName = "公司名字",
+            ContactPerson = "联系人",
+            Email = "admin@admin.com",
+            Latitude = "111",
+            Longitude = "222",
+            Mobile = "333",
+        }).ExecuteCommand();
+        #endregion
+
+
         if (db.DbMaintenance.IsAnyTable(nameof(FileSourceClassEntity), false)) db.DbMaintenance.DropTable(nameof(FileSourceClassEntity));
 
         #region 初始化文件分类

@@ -34,7 +34,7 @@ namespace WaiBao.Api
             whereIFs.Add(
                 new WhereIFs<ArticleEntity>
                 {
-                    where = string.IsNullOrEmpty(model.Key),
+                    where = !string.IsNullOrEmpty(model.Key),
                     expression = a => a.Title.Contains(model.Key)
                 });
 

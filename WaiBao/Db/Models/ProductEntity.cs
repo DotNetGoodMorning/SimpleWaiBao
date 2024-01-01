@@ -122,6 +122,11 @@ public class ProductClassEntity : BaseEntity
     public string Title { get; set; } = string.Empty;
 
     /// <summary>
+    /// 英文名
+    /// </summary>
+    public string? EnTitle { get; set; } = string.Empty;
+
+    /// <summary>
     /// 子级
     /// </summary>
     [SqlSugar.SugarColumn(IsIgnore = true)]

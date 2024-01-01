@@ -9,6 +9,7 @@ using WaiBao;
 using System.Text.Json.Serialization;
 using System.Net;
 using WaiBao.Db.Models;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,8 +91,14 @@ builder.Services.AddControllers();
 //限制文件上传大小
 builder.Services.Configure<FormOptions>(options =>
 {
-    // 设置上传大小限制256MB
-    options.MultipartBodyLengthLimit = 268435456;
+    options.MultipartBodyLengthLimit = 1024 * 1024 * 1024;
+    options.ValueLengthLimit = int.MaxValue;
+
+});
+
+builder.Services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestBodySize = 1024 * 1024 * 1024;
 
 });
 //注入sqlsugar缓存实现
@@ -197,15 +204,22 @@ app.MapGet("/health", () => "1024");
 SqlSugarHelper.Db.DbMaintenance.CreateDatabase();
 
 
-//if (SqlSugarHelper.Db.DbMaintenance.IsAnyTable(nameof(FileSourceClassEntity), false)) SqlSugarHelper.Db.DbMaintenance.DropTable(nameof(FileSourceClassEntity));
 
-//#region 初始化文件分类
-//SqlSugarHelper.Db.CodeFirst.InitTables<FileSourceClassEntity>();
-//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "001", Name = "图片" }).ExecuteCommand();
-//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "002", Name = "视频" }).ExecuteCommand();
-//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "003", Name = "产品认证" }).ExecuteCommand();
-//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "004", Name = "产品说明书" }).ExecuteCommand();
-//SqlSugarHelper.Db.Insertable(new FileSourceClassEntity { Code = "005", Name = "软件" }).ExecuteCommand();
+
+//if (SqlSugarHelper.Db.DbMaintenance.IsAnyTable(nameof(SiteInfoEntity), false)) SqlSugarHelper.Db.DbMaintenance.DropTable(nameof(SiteInfoEntity));
+
+//#region 初始化网站基本信息
+//SqlSugarHelper.Db.CodeFirst.InitTables<SiteInfoEntity>();
+//SqlSugarHelper.Db.Insertable(new SiteInfoEntity
+//{
+//    Address = "地址信息",
+//    CompanyName = "公司名字",
+//    ContactPerson = "联系人",
+//    Email = "admin@admin.com",
+//    Latitude = "111",
+//    Longitude = "222",
+//    Mobile = "333",
+//}).ExecuteCommand();
 //#endregion
 
 

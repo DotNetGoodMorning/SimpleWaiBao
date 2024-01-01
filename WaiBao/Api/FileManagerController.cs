@@ -34,21 +34,21 @@ namespace WaiBao.Api
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost,Authorize]
+        [HttpPost, Authorize]
         public async Task<ApiResult> SaveFileClass([FromBody] FileSourceClassEntity model)
         {
             bool has = false;
             if (model.Id > 0)
-                has =await db.Queryable<FileSourceClassEntity>().Where(a => a.Id != model.Id && a.Code == model.Code).AnyAsync();
+                has = await db.Queryable<FileSourceClassEntity>().Where(a => a.Id != model.Id && a.Code == model.Code).AnyAsync();
             else
                 has = await db.Queryable<FileSourceClassEntity>().Where(a => a.Code == model.Code).AnyAsync();
 
-            if (has)            
-                return Error("添加失败,已存在相同编码的文件分类");            
+            if (has)
+                return Error("添加失败,已存在相同编码的文件分类");
 
             return Result(await SaveAsync<FileSourceClassEntity>(model));
         }
-      
+
 
         /// <summary>
         /// 获取文件分类列表
@@ -56,9 +56,9 @@ namespace WaiBao.Api
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ApiResult> GetListFileClass([FromBody]ReqPage model)
+        public async Task<ApiResult> GetListFileClass([FromBody] ReqPage model)
         {
-            var lst = GetPage<FileSourceClassEntity>(model,
+            var lst = await GetPage<FileSourceClassEntity>(model,
                 new List<WhereIFs<FileSourceClassEntity>> {
                     new WhereIFs<FileSourceClassEntity>
                     {
@@ -66,7 +66,48 @@ namespace WaiBao.Api
                                    where = !string.IsNullOrWhiteSpace(model.Key)
                      }
                 });
+
             return Success(lst);
+        }
+
+        /// <summary>
+        /// 获取前台展示文件分类列表
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ApiResult> GetListFrontFileClass([FromBody] ReqPage model)
+        {
+
+            var notViewsClassCode = new List<string> { "001", "002" };
+
+            var lst = await GetPage<FileSourceClassEntity>(model,
+                new List<WhereIFs<FileSourceClassEntity>> {
+                    new WhereIFs<FileSourceClassEntity>
+                    {
+                  expression =  a => a.Name.Contains(model.Key),
+                                   where = !string.IsNullOrWhiteSpace(model.Key)
+                     },
+                    new WhereIFs<FileSourceClassEntity>
+                    {
+                         where = true,
+                          expression = a=> !notViewsClassCode.Contains(a.Code)
+                    }
+                });
+
+            return Success(lst);
+        }
+
+
+        /// <summary>
+        /// 删除文件分类
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async  Task<ApiResult> DelFileClass(int id)
+        {
+          return Result(await DeleteAsync<FileSourceClassEntity>(id));
         }
 
         #endregion
@@ -83,7 +124,7 @@ namespace WaiBao.Api
         {
              new WhereIFs<FileSourceEntity>
              {
-                  expression =  a => a.SourceType == 1,
+                  expression =  a => a.SourceType == model.SourceType,
                   where = model.SourceType != -1
              },
              new WhereIFs<FileSourceEntity>
@@ -93,7 +134,8 @@ namespace WaiBao.Api
              }
         };
 
-            var pageInfo = await GetPage(model, whereIfs, a => a.Id, OrderByType.Desc);
+            var pageInfo = await GetPage(model, whereIfs, a => a.Id, OrderByType.Desc,true);
+
             return Success(pageInfo);
         }
 
@@ -320,6 +362,7 @@ namespace WaiBao.Api
                 lst.Add(new FileSourceEntity
                 {
                     ClassCode = dto.Foo,
+                    CoverImage = dto.CoverImage,
                     Name = file.FileName,
                     Path = path,
                     SourceType = 2,
@@ -353,6 +396,20 @@ namespace WaiBao.Api
         [HttpGet]
         public async Task<ApiResult> Del(int id)
         {
+            var info = await GetAsync<FileSourceEntity>(a => a.Id == id);
+            if (info == null) return SuccessMsg("删除成功");
+
+            try
+            {
+                var localFilePath = Path.Combine(AppConfig.RootPath, info.Path);
+                System.IO.File.Delete(localFilePath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"文件删除失败,{ex.ToString()}");
+            }
+         
+
             return Result(await DeleteAsync<FileSourceEntity>(id));
         }
 
