@@ -57,6 +57,11 @@ public class FileSourceClassEntity : BaseEntity
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
+    /// 英文名
+    /// </summary>
+    public string EnName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 编码   默认数据：001 图片  002 视频 
     /// </summary>
     public string Code { get; set; } = string.Empty;
