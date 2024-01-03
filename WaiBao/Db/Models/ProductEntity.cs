@@ -63,6 +63,11 @@ public class ProductEntity : BaseEntity
     public string? ProductName { get; set; }
 
     /// <summary>
+    /// 产品英文名
+    /// </summary>
+    public string? ProductEnName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 产品颜色
     /// </summary>
     public string? ProductColor { get; set; }
